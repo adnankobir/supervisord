@@ -1,0 +1,9 @@
+FROM i386/golang:alpine AS builder
+
+RUN apk add --no-cache --update git gcc rust
+
+COPY . /src
+WORKDIR /src
+
+RUN go generate && \
+    GOOS=linux GOARCH=386 go build -tags release -a -ldflags "-linkmode external -extldflags -static" -o supervisord
